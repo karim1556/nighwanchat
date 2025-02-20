@@ -366,6 +366,7 @@ const knowledgeBase = [
     }
 ];
 
+
 // Helper function to detect greetings
 function isGreeting(query) {
     const greetings = ["hi", "hello", "hey"];
