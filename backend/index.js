@@ -685,6 +685,7 @@ const knowledgeBase = [
 
 
 // Helper function to detect greetings
+// Helper function to check if a query is a simple greeting
 function isGreeting(query) {
     const greetings = ["hi", "hello", "hey"];
     return greetings.includes(query.toLowerCase().trim());
@@ -699,21 +700,26 @@ function retrieveRelevantDocuments(query) {
     });
 }
 
-// Function to generate a response using the Groq API
-async function generateResponse(context) {
+// Updated function to generate a response using the Groq API with improved prompts
+async function generateResponse(query, context) {
     try {
+        // System prompt instructs to produce a concise, question-specific answer
+        const systemPrompt = "You are a professional AI assistant. Provide a concise, question-specific answer based solely on the provided context. Use Markdown formatting with **bold** for emphasis, *italics* for definitions, and lists for multiple points. Avoid unnecessary details.";
+        // User prompt now includes both the original query and the context from the knowledge base
+        const userPrompt = `Query: ${query}\n\nContext: ${context}\n\nAnswer:`;
+        
         const response = await groq.chat.completions.create({
             messages: [
                 {
                     role: "system",
-                    content: "You are a professional AI assistant. Provide short, informative responses using Markdown formatting. Use **bold** for emphasis, *italics* for definitions, and lists for multiple points.",
+                    content: systemPrompt,
                 },
                 {
                     role: "user",
-                    content: context,
+                    content: userPrompt,
                 },
             ],
-            model: "llama-3.3-70b-versatile", // Replace with your actual Groq model ID
+            model: "qwen-2.5-32b", // Replace with your actual Groq model ID
         });
 
         let rawResponse = response.choices[0]?.message?.content || "Sorry, I could not generate a response.";
@@ -745,8 +751,11 @@ async function ragChatbot(query) {
         return 'Sorry, I could not find any relevant information.';
     }
 
-    const context = relevantDocuments.map(doc => doc.answer).join(' ');
-    const response = await generateResponse(context);
+    // Optionally, limit the context to the top 3 relevant documents for brevity
+    const limitedContext = relevantDocuments.slice(0, 3).map(doc => doc.answer).join(' ');
+
+    // Generate a response using both the query and the limited context
+    const response = await generateResponse(query, limitedContext);
     return response;
 }
 
