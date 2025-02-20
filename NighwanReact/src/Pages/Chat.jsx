@@ -568,23 +568,24 @@ export default function Chat() {
 
   const sendChatMessage = async (message) => {
     try {
-        const response = await fetch('http://localhost:3000/chat', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ query: message }),
-        });
-
-        if (!response.ok) throw new Error(`Failed to send message: ${response.status}`);
-
-        const data = await response.json();
-        if (data.error) throw new Error(data.error);
-
-        return data.response;
+      const response = await fetch('https://nighwanchat-main.onrender.com/chat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query: message }),
+      });
+  
+      if (!response.ok) throw new Error(`Failed to send message: ${response.status}`);
+  
+      const data = await response.json();
+      if (data.error) throw new Error(data.error);
+  
+      return data.response;
     } catch (err) {
-        console.error(err.message);
-        return null;
+      console.error(err.message);
+      return null;
     }
-};
+  };
+  
 
   const sendMessage = useCallback(async () => {
     if (!inputMessage.trim() || isLoading) return;
