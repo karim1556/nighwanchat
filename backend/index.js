@@ -756,6 +756,11 @@ async function ragChatbot(query) {
 
     // Generate a response using both the query and the limited context
     const response = await generateResponse(query, limitedContext);
+    // If the generated response indicates that the provided context is lacking,
+    // return the contact info instead.
+    if (response.includes("does not include information")) {
+        return 'Please contact us via our website’s contact form, email at contact@nighwantech.com, or call +91 8985025794 for further assistance.';
+    }
     return response;
 }
 
