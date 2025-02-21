@@ -748,7 +748,7 @@ async function ragChatbot(query) {
 
     const relevantDocuments = retrieveRelevantDocuments(query);
     if (relevantDocuments.length === 0) {
-        return 'Sorry, I could not find any relevant information.';
+        return 'Please contact us via our website’s contact form, email at contact@nighwantech.com, or call +91 8985025794 for further assistance.';
     }
 
     // Optionally, limit the context to the top 3 relevant documents for brevity
@@ -758,6 +758,7 @@ async function ragChatbot(query) {
     const response = await generateResponse(query, limitedContext);
     return response;
 }
+
 
 const app = express();
 const port = 3000;

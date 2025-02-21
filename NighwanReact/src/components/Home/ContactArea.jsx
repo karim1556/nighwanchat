@@ -398,6 +398,10 @@ const ContactArea = () => {
   // Submit Form Data
   const submitFormData = async (formData, captchaToken) => {
     try {
+      // Optionally, you can verify the captchaToken on your backend here
+      // before proceeding with the form submission.
+  
+      // Build your request body without including the captcha token
       const requestBody = {
         isActive: true,
         createdOn: new Date().toISOString(),
@@ -413,10 +417,9 @@ const ContactArea = () => {
         sourceId: 0,
         source: "NTPL Website Contact Form",
         message: formData.message,
-        captcha: captchaToken,
         enquiryFormIds: [0],
       };
-
+  
       const response = await fetch("https://jobportalapi.leanxpert.in/api/EnquiryForm", {
         method: "POST",
         headers: {
@@ -425,9 +428,9 @@ const ContactArea = () => {
         },
         body: JSON.stringify(requestBody),
       });
-
+  
       if (!response.ok) throw new Error("Failed to submit form.");
-
+  
       setAlertMessage("Form submitted successfully!");
       setFormData({
         first_name: "",
@@ -448,6 +451,7 @@ const ContactArea = () => {
       setIsLoading(false);
     }
   };
+  
 
   // Handle Form Submission
   const handleSubmit = (e) => {
@@ -493,7 +497,7 @@ const ContactArea = () => {
                         id="first_name"
                         type="text"
                         name="first_name"
-                        placeholder={errors.first_name ? "First Name is required." : "First Name"}
+                        placeholder={errors.first_name ? " Name is required." : "Your Name"}
                         value={formData.first_name}
                         onChange={handleChange}
                         className={errors.first_name ? "error-input" : ""}
@@ -518,7 +522,7 @@ const ContactArea = () => {
                       <select className="number-prefix">
                         <option value="IN">IN</option>
                       </select>
-                      <label htmlFor="phone_number">Phone Number</label>
+                      <label htmlFor="phone_number"></label>
                       <input
                         id="phone_number"
                         type="tel"
