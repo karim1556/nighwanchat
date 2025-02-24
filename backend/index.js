@@ -758,7 +758,7 @@ async function ragChatbot(query) {
     const response = await generateResponse(query, limitedContext);
     
     // If the generated response indicates insufficient context, return fallback contact info
-    if (response.toLowerCase().includes("does not include","does not contain","does not cover","does not address")) {
+    if (response.toLowerCase().includes("does not include")) {
         return 'Please contact us via our website’s contact form, email at contact@nighwantech.com, or call +91 8985025794 for further assistance.';
     }
     
